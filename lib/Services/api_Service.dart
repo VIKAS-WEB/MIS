@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'package:mis/Models/Attendance.dart';
 import 'dart:convert';
@@ -145,11 +148,23 @@ class ApiService {
 
       if (response.statusCode == 200) {
         print("Check-Out successful: ${response.body}");
+        Get.snackbar(
+            "Check-Out Successful", "You have successfully checked out.",
+            backgroundColor: Colors.green,
+            snackPosition: SnackPosition.BOTTOM,
+            colorText: Colors.white,
+            duration: Duration(seconds: 2));
       } else {
         print("Failed to check-out: ${response.body}");
       }
     } catch (e) {
       print("Error during Check-Out: $e");
+
+      Get.snackbar("Error during Check-Out:", "$e",
+          backgroundColor: Colors.red,
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.black45,
+          duration: Duration(seconds: 2));
     }
   }
 }
