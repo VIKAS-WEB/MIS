@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:mis/Models/Attendance.dart';
-import 'package:mis/Screens/AttendanceHistory.dart';
 import 'package:mis/Services/api_Service.dart';
 
 class AttendanceScreen extends StatefulWidget {
@@ -40,36 +42,35 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Icon(Icons.calendar_today,
-                      size: 24.0, color: Color(0xFF00a0d2)),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          color: const Color(0xFF00a0d2), width: 1.5),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: DropdownButton<String>(
-                      value: 'January',
-                      underline: const SizedBox(),
-                      onChanged: (String? newValue) {
-                        // Handle month change
-                      },
-                      items: <String>['January', 'February', 'March', 'April']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Icon(Icons.calendar_today,
+                    size: 24.0, color: Color(0xFF00a0d2)),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  decoration: BoxDecoration(
+                    border:
+                        Border.all(color: const Color(0xFF00a0d2), width: 1.5),
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                ],
-              ),
-            
+                  child: DropdownButton<String>(
+                    value: 'January',
+                    underline: const SizedBox(),
+                    onChanged: (String? newValue) {
+                      // Handle month change
+                    },
+                    items: <String>['January', 'February', 'March', 'April']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 16.0),
             Expanded(
               child: FutureBuilder<List<Attendance>>(
@@ -108,66 +109,106 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     );
   }
 
-  Widget buildAttendanceCard(BuildContext context, String day, String time,
+  Widget buildAttendanceCard(BuildContext context, String checkIn, String time,
       String punchOut, String totalHours, Color cardColor) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            blurRadius: 6.0,
-            spreadRadius: 2.0,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: cardColor,
-              borderRadius: BorderRadius.circular(10.0),
+    try {
+      // Trim any leading/trailing spaces
+      checkIn = checkIn.trim();
+
+      // Parse the date in the 'dd-MM-yyyy' format
+      DateTime checkInDate = DateFormat('dd-MM-yyyy').parse(checkIn);
+
+      // Format the parsed date into the desired display format (e.g., "Mon, Dec 26").
+      String date = DateFormat('dd').format(checkInDate);
+      String day = DateFormat('E').format(checkInDate);
+      return Container(
+        padding: const EdgeInsets.all(10.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F5F5),
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 6.0,
+              spreadRadius: 2.0,
             ),
-            child: Center(
-              child: Text(
-                day,
-                style: const TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // Container for the day and date
+            Container(
+              width: 90,
+              height: 70,
+              decoration: BoxDecoration(
+                color: cardColor,
+                borderRadius: BorderRadius.circular(10.0),
               ),
-            ),
-          ),
-          const SizedBox(width: 16.0),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  buildDetailRow(time, 'Punch In'),
-                  const SizedBox(width: 8.0),
-                  buildDetailRow(punchOut, 'Punch Out'),
-                  const SizedBox(width: 8.0),
-                  buildDetailRow(totalHours, 'Total Hours'),
-                  const SizedBox(width: 8.0),
                   Text(
-                    'View Map',
-                    style: const TextStyle(fontSize: 14.0, color: Colors.grey),
+                    date, // Display formatted date
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    day, // Display formatted date
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.white,
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
+            const SizedBox(width: 16.0),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    buildDetailRow(time, 'Punch In'),
+                    const SizedBox(width: 15.0),
+                    buildDetailRow(punchOut, 'Punch Out'),
+                    const SizedBox(width: 15.0),
+                    buildDetailRow(totalHours, 'Total Hours'),
+                    const SizedBox(width: 15.0),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed('/AttendanceHistory');
+                          },
+                          child: Text(
+                            'View Map',
+                            style: const TextStyle(
+                                fontSize: 14.0, color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      return Center(
+        child: Text('Error parsing date: $e'),
+      );
+    }
   }
 
   Widget buildDetailRow(String title, String value) {
@@ -178,7 +219,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           children: [
             Text(
               title,
-              // Handle empty values
               style:
                   const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
