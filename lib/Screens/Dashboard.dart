@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:mis/Screens/Attendance.dart';
 import 'package:mis/Screens/AttendanceHistory.dart';
@@ -18,8 +20,34 @@ class _DashboardState extends State<Dashboard> {
   String locationAddress = 'Fetching Address...'; // Default location address
   String currentTime = ''; // Variable to hold current time
   String currentDate = ''; // Variable to hold current date
+  String checkInTime = 'Not Checked In';
 
-  // Method to get current location
+  @override
+  void initState() {
+    super.initState();
+    _fetchCurrentTimeAndDate();
+    _fetchCurrentLocationAndAddress();
+  }
+
+  void _fetchCurrentTimeAndDate() {
+    setState(() {
+      currentTime = DateFormat('hh:mm a').format(DateTime.now()); // Time format
+      currentDate = DateFormat('EEEE, MMM dd, yyyy')
+          .format(DateTime.now()); // Date format
+    });
+  }
+
+  Future<void> _fetchCurrentLocationAndAddress() async {
+    try {
+      Position position = await _getCurrentLocation();
+      await _fetchAddress(position.latitude, position.longitude);
+    } catch (e) {
+      setState(() {
+        locationAddress = 'Unable to fetch address';
+      });
+    }
+  }
+
   Future<Position> _getCurrentLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -87,7 +115,6 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
-  // Method to handle the check-in process
   Future<void> _handleCheckIn() async {
     try {
       // Fetch current location
@@ -120,13 +147,29 @@ class _DashboardState extends State<Dashboard> {
 
       // Update the UI or perform additional actions after success
       print("Check-In and Location Track successful.");
+
+      Get.snackbar(
+        "Check-In Successful",
+        "You have successfully checked in.",
+        backgroundColor: Colors.green,
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.white,
+        duration: Duration(seconds: 2),
+      );
     } catch (e) {
       print("Error occurred: $e");
+
+      Get.snackbar(
+        "Error occurred",
+        "$e",
+        backgroundColor: Colors.red,
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.black45,
+        duration: Duration(seconds: 2),
+      );
     }
   }
 
-  // Method to handle the check-out process
-  // Method to handle the check-in process
   Future<void> _handleCheckOut() async {
     try {
       // Fetch current location
@@ -298,7 +341,7 @@ class _DashboardState extends State<Dashboard> {
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                currentTime,
+                                isSwitchOn ? currentTime : 'Not Checked In',
                                 style: const TextStyle(color: Colors.white70),
                               ),
                             ],
