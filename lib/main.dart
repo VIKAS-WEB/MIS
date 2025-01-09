@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mis/Bindings/Login_Binding.dart';
-import 'package:mis/Controllers/login_controller.dart';
-import 'package:mis/Screens/Dashboard.dart';
-import 'package:mis/Screens/LoginScreen.dart';
+import 'package:mis/utils/routes.dart';
 
 void main() {
   runApp(const MyApp());
-  Get.put(LoginController());
+  // Get.put(LoginController());
 }
 
 class MyApp extends StatelessWidget {
@@ -25,11 +23,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      initialRoute: '/',
-      getPages: [
-        GetPage(name: '/', page: () => LoginScreen()),
-        GetPage(name: '/dashboard', page: () => Dashboard()),
-      ],
+      initialRoute: AppRoutes.login,
+      getPages: AppRoutes.routes,
     );
   }
 }

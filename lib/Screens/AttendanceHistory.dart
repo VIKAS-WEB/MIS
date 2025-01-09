@@ -21,8 +21,8 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
     super.initState();
     _fetchCurrentLocation();
     attendanceHistory = ApiService().fetchAttendanceHistory(
-      userId: '4', 
-      attendanceId: '196', 
+      userId: '4',
+      attendanceId: '196',
     );
   }
 
