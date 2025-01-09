@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
         return Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Login',
                     style: TextStyle(fontSize: 30, color: Colors.white),
                   )),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 30),
                   SizedBox(
                     height: 60,
                     child: TextField(
@@ -44,7 +44,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         labelStyle: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.w500),
                         floatingLabelStyle: const TextStyle(
-                            color: Color(0XFF4a8887), fontSize: 14.0),
+                            color: Colors.black,
+                            fontSize: 17.0,
+                            fontWeight: FontWeight.bold),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
@@ -52,13 +54,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         fillColor: Colors.white,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
-                          borderSide: const BorderSide(
-                              color: Colors.white, width: 1.5),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 1.5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
-                          borderSide: const BorderSide(
-                              color: Colors.blueAccent, width: 2.0),
+                          borderSide:
+                              const BorderSide(color: Colors.black, width: 2.0),
                         ),
                       ),
                     ),
@@ -74,7 +76,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         labelStyle: const TextStyle(
                             color: Colors.black, fontWeight: FontWeight.w500),
                         floatingLabelStyle: const TextStyle(
-                            color: Colors.blueAccent, fontSize: 14.0),
+                            color: Colors.black,
+                            fontSize: 17.0,
+                            fontWeight: FontWeight.bold),
                         suffixIcon: IconButton(
                           icon: Icon(
                             color: Colors.grey,
@@ -95,13 +99,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         fillColor: Colors.white,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
-                          borderSide: const BorderSide(
-                              color: Colors.white, width: 1.5),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 1.5),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
-                          borderSide: const BorderSide(
-                              color: Colors.blueAccent, width: 2.0),
+                          borderSide:
+                              const BorderSide(color: Colors.black, width: 2.0),
                         ),
                       ),
                     ),
@@ -113,7 +117,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         final userName = _emailController.text.trim();
                         final password = _passwordController.text.trim();
-                        controller.login(userName: userName, password: password);
+                        controller.login(
+                            userName: userName, password: password);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0XFF006e8c),
@@ -121,7 +126,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             vertical: 25.0, horizontal: 135.0),
                       ),
                       child: const Text('Login',
-                          style: TextStyle(fontSize: 16.0, color: Colors.white)),
+                          style:
+                              TextStyle(fontSize: 16.0, color: Colors.white)),
                     ),
                   ),
                   const SizedBox(height: 20.0),
